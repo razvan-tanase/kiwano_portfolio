@@ -1,0 +1,81 @@
+{
+  "symbol": "BTC-USD",
+  "interval": "1d",
+  "start_date": "2017-11-28",
+  "end_date": "2022-11-28",
+  "sampling": "calendar_daily",
+  "base_cost_usd": 1.0,
+  "price_points": 1827,
+  "notes": "Window selected by matching DCA row first (ctot=1827 and ROI close to paper), then evaluating other strategies on the same window. sig+ uses rho=8.8 and lookback=180 to better align with paper table scale.",
+  "results": [
+    {
+      "strategy": "DCA",
+      "parameters": {
+        "strategy": "dca"
+      },
+      "mu_usd_per_btc": 10688.240219979622,
+      "qtot_btc": 0.17093552936663725,
+      "ctot_usd": 1827.0,
+      "roi_multiple": 1.517305181381479,
+      "paper_reference": {
+        "mu": 10942.8,
+        "q": 0.166,
+        "c": 1827.0,
+        "roi": 1.518
+      }
+    },
+    {
+      "strategy": "(sig+) SmartDCA",
+      "parameters": {
+        "strategy": "sigplus",
+        "rho": 8.8,
+        "sigplus_lookback": 180
+      },
+      "mu_usd_per_btc": 9095.223819329325,
+      "qtot_btc": 0.057830903326074004,
+      "ctot_usd": 525.9850094246398,
+      "roi_multiple": 1.78305917344878,
+      "paper_reference": {
+        "mu": 8893.6,
+        "q": 0.058,
+        "c": 516.3,
+        "roi": 1.868
+      }
+    },
+    {
+      "strategy": "(tanh) SmartDCA",
+      "parameters": {
+        "strategy": "bounded_out",
+        "rho": 1.0,
+        "bound": "tanh"
+      },
+      "mu_usd_per_btc": 8213.044119582199,
+      "qtot_btc": 0.13658824852027848,
+      "ctot_usd": 1121.8053113135052,
+      "roi_multiple": 1.9745811698439995,
+      "paper_reference": {
+        "mu": 7134.8,
+        "q": 2.34e-05,
+        "c": 0.166,
+        "roi": 2.328
+      }
+    },
+    {
+      "strategy": "3-SmartDCA",
+      "parameters": {
+        "strategy": "rho",
+        "rho": 3.0
+      },
+      "mu_usd_per_btc": 4744.679895185688,
+      "qtot_btc": 0.9460852096921232,
+      "ctot_usd": 4488.871473558753,
+      "roi_multiple": 3.418001345481773,
+      "paper_reference": {
+        "mu": 4790.5,
+        "q": 0.873,
+        "c": 4180.9,
+        "roi": 3.46
+      }
+    }
+  ]
+}
