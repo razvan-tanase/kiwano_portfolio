@@ -17,7 +17,10 @@
 import pandas as pd
 import numpy as np
 
-import keyboard
+try:
+    import keyboard
+except ImportError:
+    keyboard = None
 from datetime import datetime, timedelta
 import time
 
@@ -91,11 +94,11 @@ def smart_pause(timestamp, delta_t, extra_wait=0, step=0.06, key=None, force_sel
 
         # Check escape key
         if key is not None:
-            if keyboard.is_pressed(key):
+            if keyboard is not None and keyboard.is_pressed(key):
                 print(f"{key} pressed, ending loop")
                 return False
         if force_sell is not None:
-            if keyboard.is_pressed(force_sell):
+            if keyboard is not None and keyboard.is_pressed(force_sell):
                 print(f"{key} Order 66: ending loop and selling assets")
                 return 66
 

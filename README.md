@@ -68,3 +68,20 @@ Want to participate in the Kiwano adventure, join our Discord !
 <a href="https://discord.gg/698CKv8t">
 <img src="https://it.moobion.com/wp-content/uploads/2020/11/discord-logo.png" alt="https://discord.gg/698CKv8t" style="width:48px;height:48px;">
 </a>
+
+
+## SmartDCA experiment reproduction
+
+This repository now includes `kiwano_portfolio.strategy.smartdca_experiments` to reproduce the paper-style DCA vs SmartDCA backtests using historical prices fetched through `kiwano_portfolio` (`Portfolio` with `api="yfinance"`).
+
+Example:
+
+```bash
+python -m kiwano_portfolio.strategy.smartdca_experiments --symbol BTCUSD --timeframe 1d --lookback 5y --base-cost 100 --rhos 0.5 1 2
+```
+
+The script exports a ranked CSV (`smartdca_results.csv` by default) with ROI/final value for:
+- Standard DCA
+- Unbounded `rho`-SmartDCA
+- Bounded `(f)rho` SmartDCA (`tanh`, `sigmoid`, `sin-1`, out version)
+- Adaptive `sig+` SmartDCA
