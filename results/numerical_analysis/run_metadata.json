@@ -1,0 +1,106 @@
+{
+  "best_moment_btc": {
+    "name": "moment_xi3_lam0.75",
+    "kind": "moment_tilted",
+    "rho": 2,
+    "xi": 3,
+    "lam": 0.75,
+    "window": 90,
+    "rho_max": 2.0,
+    "kappa": 1.0
+  },
+  "best_adaptive_btc": {
+    "name": "adaptive_W90_rmax2_k0.5",
+    "kind": "adaptive_rho",
+    "rho": 0.0,
+    "xi": 1,
+    "lam": 0.0,
+    "window": 90,
+    "rho_max": 2,
+    "kappa": 0.5
+  },
+  "strategies": [
+    {
+      "name": "DCA",
+      "kind": "dca",
+      "rho": 0.0,
+      "xi": 1,
+      "lam": 0.0,
+      "window": 90,
+      "rho_max": 2.0,
+      "kappa": 1.0
+    },
+    {
+      "name": "rho=1",
+      "kind": "rho_unbounded",
+      "rho": 1,
+      "xi": 1,
+      "lam": 0.0,
+      "window": 90,
+      "rho_max": 2.0,
+      "kappa": 1.0
+    },
+    {
+      "name": "rho=2",
+      "kind": "rho_unbounded",
+      "rho": 2,
+      "xi": 1,
+      "lam": 0.0,
+      "window": 90,
+      "rho_max": 2.0,
+      "kappa": 1.0
+    },
+    {
+      "name": "rho=3",
+      "kind": "rho_unbounded",
+      "rho": 3,
+      "xi": 1,
+      "lam": 0.0,
+      "window": 90,
+      "rho_max": 2.0,
+      "kappa": 1.0
+    },
+    {
+      "name": "tanh_rho=1",
+      "kind": "bounded_tanh",
+      "rho": 1,
+      "xi": 1,
+      "lam": 0.0,
+      "window": 90,
+      "rho_max": 2.0,
+      "kappa": 1.0
+    },
+    {
+      "name": "tanh_rho=2",
+      "kind": "bounded_tanh",
+      "rho": 2,
+      "xi": 1,
+      "lam": 0.0,
+      "window": 90,
+      "rho_max": 2.0,
+      "kappa": 1.0
+    },
+    {
+      "name": "moment_tilted(rho=2,xi=3,lam=0.75)",
+      "kind": "moment_tilted",
+      "rho": 2,
+      "xi": 3,
+      "lam": 0.75,
+      "window": 90,
+      "rho_max": 2.0,
+      "kappa": 1.0
+    },
+    {
+      "name": "adaptive(W=90,rho_max=2,k=0.5)",
+      "kind": "adaptive_rho",
+      "rho": 0.0,
+      "xi": 1,
+      "lam": 0.0,
+      "window": 90,
+      "rho_max": 2,
+      "kappa": 0.5
+    }
+  ],
+  "n_sp500": 12861,
+  "n_btc": 2556
+}
