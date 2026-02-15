@@ -1,0 +1,36 @@
+# Numerical Analysis and Practical Evaluation Outputs
+
+This folder contains the simulation outputs requested in the "Numerical Analysis and Practical Evaluation" section.
+
+## Produced figures
+
+- Figure N1 (synthetic sanity check): `figure_n1_synthetic.png`
+- Figure N2 (full-horizon cumulative ROI):
+  - `figure_n2_sp500.png`
+  - `figure_n2_btc.png`
+- Figure N3 (subperiod ROI bars):
+  - `figure_n3_sp500.png`
+  - `figure_n3_btc.png`
+
+## Produced tables / CSV exports
+
+- Headline summary for all compared strategies on both assets: `headline_summary.csv`
+- BTC headline table (Table N1 equivalent): `table_n1_btc_2017_2023.csv`
+- S&P500 5-year block ROI: `sp500_subperiod_roi.csv`
+- BTC 1-year block ROI: `btc_subperiod_roi.csv`
+- Fraction of blocks beating DCA: `beat_dca_fraction.csv`
+- Moment-tilt ablation (BTC): `ablation_moment_tilt_btc.csv`
+- Adaptive-kappa ablation (BTC): `ablation_adaptive_kappa_btc.csv`
+
+## Selected best extension settings on BTC (train/validation split)
+
+- Best moment-tilted setting: `rho=2`, `xi=3`, `lambda=0.75`
+- Best adaptive-rho setting: `W=90`, `rho_max=2`, `kappa=0.5`
+
+(Stored in machine-readable form in `run_metadata.json`.)
+
+## Re-run command
+
+```bash
+python results/numerical_analysis/run_numerical_analysis.py
+```
