@@ -93,10 +93,27 @@ def simulate(prices: pd.Series, spec: StrategySpec):
         "Q": float(Q[-1]),
         "C": float(C[-1]),
         "ROI": float(roi_t[-1]),
+        "V": float(Q[-1] * p[-1]),
         "max_c": float(c.max()),
         "cv_c": float(np.std(c) / np.mean(c)),
     }
     return metrics, pd.DataFrame({"price": p, "c": c, "C": C, "Q": Q, "mu": mu_t, "roi": roi_t}, index=prices.index)
+
+
+def budget_normalized_metrics(metrics: dict, target_c: float) -> dict:
+    current_c = max(metrics["C"], 1e-12)
+    scale = target_c / current_c
+    return {
+        "C_target": float(target_c),
+        "scale_to_target_C": float(scale),
+        "mu_budget_norm": float(metrics["mu"]),
+        "Q_budget_norm": float(metrics["Q"] * scale),
+        "C_budget_norm": float(metrics["C"] * scale),
+        "ROI_budget_norm": float(metrics["ROI"]),
+        "V_budget_norm": float(metrics["V"] * scale),
+        "max_c_budget_norm": float(metrics["max_c"] * scale),
+        "cv_c_budget_norm": float(metrics["cv_c"]),
+    }
 
 
 def choose_best_moment_btc(prices: pd.Series):
@@ -232,11 +249,21 @@ def main():
 
     summary_rows = []
     traj_cache = {}
+    target_capital = {}
     for asset_name, prices in [("SP500", sp), ("BTC", btc)]:
+        dca_metrics, _ = simulate(prices, next(s for s in strategies if s.name == "DCA"))
+        target_capital[asset_name] = dca_metrics["C"]
         for s in strategies:
             m, tr = simulate(prices, s)
             traj_cache[(asset_name, s.name)] = tr
-            summary_rows.append({"asset": asset_name, "strategy": s.name, **m})
+            summary_rows.append(
+                {
+                    "asset": asset_name,
+                    "strategy": s.name,
+                    **m,
+                    **budget_normalized_metrics(m, target_capital[asset_name]),
+                }
+            )
     summary = pd.DataFrame(summary_rows)
     summary.to_csv(OUT_DIR / "headline_summary.csv", index=False)
 
@@ -246,8 +273,8 @@ def main():
 
     # blocks
     sp_blocks = []
-    for y in range(1973, 2024, 5):
-        y2 = min(y + 5, 2024)
+    for y in range(1973, 2023, 5):
+        y2 = min(y + 5, 2023)
         sp_blocks.append((f"{y}-{y2}", f"{y}-01-01", f"{y2}-01-01"))
     btc_blocks = []
     for y in range(2018, 2023):
@@ -274,14 +301,22 @@ def main():
         for lam in [0.25, 0.5, 0.75]:
             s = StrategySpec("ab", "moment_tilted", rho=2, xi=xi, lam=lam)
             m, _ = simulate(btc, s)
-            ablation_moment.append({"xi": xi, "lambda": lam, **m})
+            ablation_moment.append({"xi": xi, "lambda": lam, **m, **budget_normalized_metrics(m, target_capital["BTC"])})
     pd.DataFrame(ablation_moment).to_csv(OUT_DIR / "ablation_moment_tilt_btc.csv", index=False)
 
     ablation_adapt = []
     for k in [0.5, 1.0, 1.5, 2.0, 3.0]:
         s = StrategySpec("ab", "adaptive_rho", window=best_adapt_btc.window, rho_max=best_adapt_btc.rho_max, kappa=k)
         m, _ = simulate(btc, s)
-        ablation_adapt.append({"window": best_adapt_btc.window, "rho_max": best_adapt_btc.rho_max, "kappa": k, **m})
+        ablation_adapt.append(
+            {
+                "window": best_adapt_btc.window,
+                "rho_max": best_adapt_btc.rho_max,
+                "kappa": k,
+                **m,
+                **budget_normalized_metrics(m, target_capital["BTC"]),
+            }
+        )
     pd.DataFrame(ablation_adapt).to_csv(OUT_DIR / "ablation_adaptive_kappa_btc.csv", index=False)
 
     plot_n1_synthetic(strategies)
@@ -296,6 +331,9 @@ def main():
         "strategies": [s.__dict__ for s in strategies],
         "n_sp500": len(sp),
         "n_btc": len(btc),
+        "sp500_horizon": [str(sp.index.min().date()), str(sp.index.max().date())],
+        "btc_horizon": [str(btc.index.min().date()), str(btc.index.max().date())],
+        "capital_target_dca": target_capital,
     }
     (OUT_DIR / "run_metadata.json").write_text(json.dumps(metadata, indent=2))
 
