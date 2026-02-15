@@ -16,6 +16,7 @@ Expected local outputs after running:
 ## Produced tables / CSV exports
 
 - Headline summary for all compared strategies on both assets: `headline_summary.csv`
+  - Includes both raw metrics and DCA-budget-normalized metrics (`*_budget_norm`) plus terminal wealth (`V`, `V_budget_norm`).
 - BTC headline table (Table N1 equivalent): `table_n1_btc_2017_2023.csv`
 - S&P500 5-year block ROI: `sp500_subperiod_roi.csv`
 - BTC 1-year block ROI: `btc_subperiod_roi.csv`
@@ -29,6 +30,17 @@ Expected local outputs after running:
 - Best adaptive-rho setting: `W=90`, `rho_max=2`, `kappa=0.5`
 
 (Stored in machine-readable form in `run_metadata.json`.)
+
+## Validity notes applied in this revision
+
+1. **Comparability under equal total capital (`C`)**
+   - The report now publishes terminal wealth `V=Q\,p_T` and DCA-budget-normalized metrics for every strategy.
+   - Budget normalization rescales each strategy contribution path by a constant factor so `C` matches DCA on the same asset while preserving timing profile.
+   - This makes side-by-side comparisons fair for readers who expect a common contribution budget.
+
+2. **S&P500 horizon consistency**
+   - S&P500 block generation now strictly uses the 1973–2023 horizon.
+   - The prior trailing `2023-2024` block was removed to match the stated study window.
 
 ## Re-run command
 
