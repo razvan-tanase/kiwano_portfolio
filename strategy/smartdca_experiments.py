@@ -89,14 +89,14 @@ def simulate_smartdca(
         multipliers = np.power(bounded, rho)
     elif strategy == "sigplus":
         params = _compute_sigplus_params(prices_arr, sigplus_lookback)
-        ratios = reference_price / prices_arr
+        inv_prices = 1.0 / prices_arr
         multipliers = np.zeros_like(prices_arr)
-        for i, ratio in enumerate(ratios):
+        for i, inv_price in enumerate(inv_prices):
             if params[i] is None:
                 multipliers[i] = 1.0
             else:
                 x0, lam = params[i]
-                value = 1.0 / (1.0 + math.exp(-((ratio - x0) / lam)))
+                value = 1.0 / (1.0 + math.exp(-((inv_price - x0) / lam)))
                 multipliers[i] = value ** rho
     else:
         raise ValueError(f"Unknown strategy: {strategy}")
