@@ -163,3 +163,9 @@ result/2022-04-18_livetesting_summary_portfolio.txt
 result/2022-04-18_livetesting_summary_portfolio.txt
 *.png
 API/yfinance/crypto_symbols.npy
+
+# Keep numerical-analysis artifacts under version control
+!results/numerical_analysis/*.csv
+!results/numerical_analysis/*.json
+results/numerical_analysis/*.png
+!results/numerical_analysis/*.md
